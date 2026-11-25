@@ -53,6 +53,56 @@ cd ..
 
 No guardes el token en archivos versionados ni en el historial de Git.
 
+## Levantar todo el entorno
+
+Desde la raíz del monorepo:
+
+```powershell
+docker compose up -d --build
+```
+
+Esto levanta:
+
+- Backend FastAPI y SQLite en `http://localhost:8000`
+- Frontend Angular en `http://localhost:4200`
+- SonarQube en `http://localhost:9000`
+- PostgreSQL interno de SonarQube
+
+Para detener todo:
+
+```powershell
+docker compose down
+```
+
+Los datos persistentes se conservan en volúmenes Docker. Opcionalmente crea un archivo `.env` a partir de `.env.example` para personalizar las credenciales JDBC de PostgreSQL. Para eliminar también los datos:
+
+```powershell
+docker compose down -v
+```
+
+## Análisis SonarQube
+
+Se recomienda analizar backend y frontend como proyectos independientes:
+
+- `crud-frutas-backend`: código Python en `backend/app`.
+- `crud-frutas-frontend`: código TypeScript en `frontend/src/app`.
+
+Generar primero las pruebas y coberturas:
+
+```powershell
+cd backend
+C:/Python314/python.exe -m pytest
+
+cd ../frontend
+npm run test:ci
+
+cd ..
+.\sonarqube\run-analysis.ps1 -Token "TU_TOKEN" -Project backend
+.\sonarqube\run-analysis.ps1 -Token "TU_TOKEN" -Project frontend
+```
+
+Usa `-Project all` para analizar ambos proyectos.
+
 ## Ejecutar frontend y backend juntos
 
 Desde la raíz del monorepo:

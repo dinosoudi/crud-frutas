@@ -8,9 +8,14 @@ __pycache__/
 coverage.xml
 htmlcov/
 
+# Frontend coverage
+frontend/coverage/
+
 # Environment and secrets
 .env
 .env.local
+.env.*
+!.env.example
 *.local
 
 # SQLite
