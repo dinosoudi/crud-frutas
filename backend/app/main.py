@@ -2,6 +2,7 @@ import sqlite3
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Path, Response, status
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import get_connection, initialize_database
 from app.schemas import Fruta, FrutaCrear, FrutaPatch
@@ -18,6 +19,15 @@ app = FastAPI(
     description="CRUD simple para guardar las frutas que conozco y cuánto me gustan.",
     version="1.0.0",
     lifespan=lifespan,
+)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # Cambia esto por el origen de tu aplicación Angular
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

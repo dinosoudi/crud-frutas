@@ -1,0 +1,21 @@
+services:
+  frutas-api:
+    build:
+      context: ./backend
+    container_name: frutas-api
+    environment:
+      DATABASE_PATH: /data/frutas.db
+    volumes:
+      - frutas-data:/data
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frutas-web
+    depends_on:
+      - frutas-api
+    ports:
+      - "4200:80"
+
+volumes:
+  frutas-data:

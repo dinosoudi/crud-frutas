@@ -1,0 +1,89 @@
+<main class="frutas-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Mi colección</p>
+      <h1>Frutas</h1>
+    </div>
+
+    <button class="button button-primary" type="button" routerLink="/frutas/nueva">
+      <span aria-hidden="true">+</span>
+      Agregar fruta nueva
+    </button>
+  </header>
+
+  @if (cargando()) {
+    <p class="status-message">Cargando frutas…</p>
+  } @else if (error()) {
+    <div class="status-message status-error">
+      <p>{{ error() }}</p>
+      <button class="button button-secondary" type="button" (click)="cargarFrutas()">Reintentar</button>
+    </div>
+  } @else if (frutas().length === 0) {
+    <section class="empty-state">
+      <span class="empty-icon">🍃</span>
+      <h2>Aún no hay frutas</h2>
+      <p>Agrega la primera fruta a tu colección.</p>
+    </section>
+  } @else {
+    <section class="frutas-layout">
+      <aside class="frutas-lista" aria-label="Lista de frutas">
+        <p class="list-label">{{ frutas().length }} frutas</p>
+
+        @for (fruta of frutas(); track fruta.id) {
+          <button
+            type="button"
+            class="fruta-item"
+            [class.selected]="frutaSeleccionada()?.id === fruta.id"
+            (click)="seleccionar(fruta)"
+          >
+            <span class="fruta-dot" [style.background]="colorCalificacion(fruta.calificacion)"></span>
+            <span class="fruta-nombre">{{ fruta.nombre }}</span>
+            <span class="fruta-mini-score">{{ fruta.calificacion }}</span>
+          </button>
+        }
+      </aside>
+
+      @if (frutaSeleccionada(); as fruta) {
+        <section class="fruta-detalle">
+          <button
+            class="button button-delete"
+            type="button"
+            [disabled]="eliminando()"
+            (click)="eliminarSeleccionada()"
+          >
+            {{ eliminando() ? 'Eliminando…' : 'Eliminar fruta' }}
+          </button>
+
+          <div
+            class="calificacion-ring"
+            [style.border-color]="colorCalificacion(fruta.calificacion)"
+            [style.box-shadow]="'0 18px 60px ' + colorCalificacion(fruta.calificacion) + '33'"
+          >
+            <strong [style.color]="colorCalificacion(fruta.calificacion)">{{ fruta.calificacion }}</strong>
+            <span>de 10</span>
+          </div>
+
+          <div class="detalle-texto">
+            <p class="eyebrow">Seleccionada</p>
+            <h2>{{ fruta.nombre }}</h2>
+
+            <div class="calificacion-barra" aria-label="Calificación">
+              <span
+                [style.width.%]="fruta.calificacion * 10"
+                [style.background]="colorCalificacion(fruta.calificacion)"
+              ></span>
+            </div>
+
+            <button
+              class="button button-edit"
+              type="button"
+              [routerLink]="['/frutas', rutaEditar(), 'editar']"
+            >
+              Editar información de {{ fruta.nombre }}
+            </button>
+          </div>
+        </section>
+      }
+    </section>
+  }
+</main>

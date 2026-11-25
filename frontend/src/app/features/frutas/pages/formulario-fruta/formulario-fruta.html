@@ -1,0 +1,68 @@
+<main class="form-page">
+  <section class="form-card">
+    <header class="form-header">
+      <a class="back-link" routerLink="/frutas" aria-label="Volver a la lista">← Volver</a>
+      <p class="eyebrow">{{ esEdicion() ? 'Editar fruta' : 'Nueva fruta' }}</p>
+      <h1>{{ esEdicion() ? 'Corregir información' : 'Agregar fruta' }}</h1>
+    </header>
+
+    @if (cargando() && esEdicion()) {
+      <p class="status-message">Cargando fruta…</p>
+    } @else {
+      <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+        <div class="field">
+          <label for="nombre">Nombre de la fruta</label>
+          <input
+            id="nombre"
+            type="text"
+            maxlength="50"
+            formControlName="nombre"
+            placeholder="Ejemplo: Mango"
+          />
+
+          @if (formulario.controls.nombre.touched && formulario.controls.nombre.invalid) {
+            <small class="field-error">
+              @if (formulario.controls.nombre.hasError('required')) {
+                El nombre es obligatorio.
+              } @else {
+                El nombre debe tener entre 1 y 50 caracteres.
+              }
+            </small>
+          }
+        </div>
+
+        <fieldset class="rating-field">
+          <legend>¿Qué tanto te gusta?</legend>
+          <div class="rating-options">
+            @for (calificacion of calificaciones; track calificacion) {
+              <label
+                class="rating-option"
+                [class.selected]="formulario.controls.calificacion.value === calificacion"
+              >
+                <input
+                  type="radio"
+                  name="calificacion"
+                  [value]="calificacion"
+                  formControlName="calificacion"
+                />
+                <span [style.background]="colorCalificacion(calificacion)">{{ calificacion }}</span>
+              </label>
+            }
+          </div>
+          <div class="rating-scale">
+            <span>No me gusta</span>
+            <span>Me encanta</span>
+          </div>
+        </fieldset>
+
+        @if (error()) {
+          <p class="form-error" role="alert">{{ error() }}</p>
+        }
+
+        <button class="save-button" type="submit" [disabled]="cargando()">
+          {{ cargando() ? 'Guardando…' : 'Guardar' }}
+        </button>
+      </form>
+    }
+  </section>
+</main>

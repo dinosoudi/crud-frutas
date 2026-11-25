@@ -52,3 +52,17 @@ cd ..
 ```
 
 No guardes el token en archivos versionados ni en el historial de Git.
+
+## Ejecutar frontend y backend juntos
+
+Desde la raíz del monorepo:
+
+```powershell
+docker compose up --build
+```
+
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:8000`
+- Documentación: `http://localhost:8000/docs`
+
+El frontend Angular permite listar, seleccionar, crear, editar y eliminar frutas. La lista lateral tiene desplazamiento independiente cuando contiene muchos elementos.

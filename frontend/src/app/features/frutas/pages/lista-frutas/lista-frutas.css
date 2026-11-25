@@ -1,0 +1,324 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.frutas-page {
+  min-height: 100vh;
+  padding: 42px clamp(24px, 5vw, 72px);
+  background:
+    radial-gradient(circle at 82% 18%, rgba(116, 178, 112, 0.12), transparent 24%),
+    #f6f3eb;
+  color: #183126;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto 34px;
+}
+
+.eyebrow,
+.list-label {
+  margin: 0 0 6px;
+  color: #7b846f;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+}
+
+.button {
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 20px;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.button-primary {
+  background: #1f5b3a;
+  color: white;
+  box-shadow: 0 12px 28px rgba(31, 91, 58, 0.18);
+}
+
+.button-primary span {
+  margin-right: 8px;
+  font-size: 1.25rem;
+}
+
+.status-message,
+.empty-state {
+  max-width: 1180px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+.status-error {
+  color: #a52d2d;
+}
+
+.empty-state {
+  padding: 70px 20px;
+  border: 1px dashed #bdc7b4;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.empty-icon {
+  font-size: 3.5rem;
+}
+
+.empty-state h2 {
+  margin: 18px 0 8px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.2rem;
+}
+
+.empty-state p {
+  color: #7b846f;
+}
+
+.frutas-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: clamp(28px, 5vw, 64px);
+  max-width: 1180px;
+  min-height: 520px;
+  margin: 0 auto;
+}
+
+.frutas-lista {
+  padding: 18px;
+  border: 1px solid #e3dfd3;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(8px);
+  max-height: 520px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #bdc7b4 transparent;
+}
+
+.frutas-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.frutas-lista::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #bdc7b4;
+}
+
+.list-label {
+  padding: 8px 10px 12px;
+}
+
+.fruta-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  width: 100%;
+  min-height: 58px;
+  margin-bottom: 6px;
+  border: 0;
+  border-radius: 16px;
+  padding: 10px 12px;
+  background: transparent;
+  color: #183126;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fruta-item:hover,
+.fruta-item.selected {
+  background: #ecefe5;
+}
+
+.fruta-item.selected {
+  box-shadow: inset 3px 0 #1f5b3a;
+}
+
+.fruta-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.fruta-nombre {
+  padding: 0 12px;
+  font-weight: 750;
+}
+
+.fruta-mini-score {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #d8dbcf;
+  border-radius: 50%;
+  font-size: 0.85rem;
+}
+
+.fruta-detalle {
+  display: grid;
+  grid-template-columns: minmax(220px, 330px) minmax(220px, 1fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 72px);
+  border-radius: 32px;
+  padding: clamp(28px, 5vw, 52px);
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #e6e1d4;
+  box-shadow: 0 24px 70px rgba(76, 86, 65, 0.08);
+  position: relative;
+}
+
+.button-delete {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  border: 1px solid #efb4b4;
+  background: #fff4f4;
+  color: #b42318;
+}
+
+.button-delete:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.calificacion-ring {
+  display: flex;
+  aspect-ratio: 1;
+  width: min(100%, 300px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 14px solid;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.calificacion-ring strong {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(5rem, 10vw, 8.5rem);
+  line-height: 0.86;
+}
+
+.calificacion-ring span {
+  margin-top: 16px;
+  color: #7b846f;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.detalle-texto h2 {
+  max-width: 520px;
+  margin: 8px 0 26px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 500;
+  line-height: 0.95;
+  overflow-wrap: anywhere;
+}
+
+.calificacion-barra {
+  width: 100%;
+  height: 8px;
+  margin-bottom: 28px;
+  border-radius: 999px;
+  background: #e7e8df;
+  overflow: hidden;
+}
+
+.calificacion-barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.button-edit {
+  border: 1px solid #cdd3c5;
+  background: #fff;
+  color: #31513d;
+}
+
+.button-secondary {
+  margin-top: 12px;
+  background: #ecefe5;
+  color: #31513d;
+}
+
+@media (max-width: 900px) {
+  .frutas-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .frutas-lista {
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .list-label {
+    display: none;
+  }
+
+  .fruta-item {
+    min-width: 180px;
+  }
+
+  .fruta-detalle {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .frutas-page {
+    padding: 24px 16px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .page-header h1 {
+    font-size: 3.4rem;
+  }
+
+  .button-primary {
+    max-width: 150px;
+  }
+
+  .fruta-detalle {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .calificacion-ring {
+    width: 230px;
+    margin: 0 auto;
+  }
+
+  .detalle-texto h2 {
+    font-size: 3.2rem;
+  }
+}
