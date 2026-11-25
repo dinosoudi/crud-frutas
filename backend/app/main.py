@@ -1,20 +1,24 @@
 import sqlite3
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Path, Response, status
 
 from app.database import get_connection, initialize_database
 from app.schemas import Fruta, FrutaCrear, FrutaPatch
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    initialize_database()
+    yield
+
+
 app = FastAPI(
     title="API de Frutas",
     description="CRUD simple para guardar las frutas que conozco y cuánto me gustan.",
     version="1.0.0",
+    lifespan=lifespan,
 )
-
-
-@app.on_event("startup")
-def startup() -> None:
-    initialize_database()
 
 
 @app.get("/frutas", response_model=list[Fruta])
