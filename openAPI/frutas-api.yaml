@@ -1,0 +1,208 @@
+openapi: 3.0.3
+info:
+  title: API de Frutas
+  description: CRUD simple para guardar las frutas que conozco y cuánto me gustan.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Servidor local
+
+tags:
+  - name: frutas
+    description: Operaciones sobre frutas
+
+paths:
+  /frutas:
+    get:
+      tags: [frutas]
+      summary: Listar todas las frutas
+      operationId: listarFrutas
+      responses:
+        "200":
+          description: Lista de frutas (vacía si no hay ninguna)
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Fruta"
+    post:
+      tags: [frutas]
+      summary: Crear una fruta
+      operationId: crearFruta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FrutaCrear"
+      responses:
+        "201":
+          description: Fruta creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fruta"
+        "422":
+          $ref: "#/components/responses/ErrorValidacion"
+
+  /frutas/{id}:
+    parameters:
+      - $ref: "#/components/parameters/FrutaId"
+    get:
+      tags: [frutas]
+      summary: Obtener una fruta por id
+      operationId: obtenerFruta
+      responses:
+        "200":
+          description: La fruta solicitada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fruta"
+        "404":
+          $ref: "#/components/responses/NoEncontrada"
+    put:
+      tags: [frutas]
+      summary: Reemplazar una fruta completa
+      description: Requiere todos los campos (nombre y calificación).
+      operationId: reemplazarFruta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FrutaCrear"
+      responses:
+        "200":
+          description: Fruta reemplazada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fruta"
+        "404":
+          $ref: "#/components/responses/NoEncontrada"
+        "422":
+          $ref: "#/components/responses/ErrorValidacion"
+    patch:
+      tags: [frutas]
+      summary: Actualizar parcialmente una fruta
+      description: Se envía solo lo que cambia (nombre, calificación o ambos).
+      operationId: actualizarFruta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FrutaParcial"
+      responses:
+        "200":
+          description: Fruta actualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Fruta"
+        "404":
+          $ref: "#/components/responses/NoEncontrada"
+        "422":
+          $ref: "#/components/responses/ErrorValidacion"
+    delete:
+      tags: [frutas]
+      summary: Eliminar una fruta
+      operationId: eliminarFruta
+      responses:
+        "204":
+          description: Fruta eliminada (sin contenido)
+        "404":
+          $ref: "#/components/responses/NoEncontrada"
+
+components:
+  parameters:
+    FrutaId:
+      name: id
+      in: path
+      required: true
+      description: Id de la fruta
+      schema:
+        type: integer
+        minimum: 1
+        example: 1
+
+  schemas:
+    Fruta:
+      type: object
+      required: [id, nombre, calificacion]
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Mango
+        calificacion:
+          type: integer
+          minimum: 1
+          maximum: 10
+          description: Qué tanto me gusta, de 1 a 10
+          example: 9
+
+    FrutaCrear:
+      type: object
+      required: [nombre, calificacion]
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Mango
+        calificacion:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 9
+
+    FrutaParcial:
+      type: object
+      minProperties: 1
+      properties:
+        nombre:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: Mango
+        calificacion:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 10
+
+    Error:
+      type: object
+      required: [detail]
+      properties:
+        detail:
+          type: string
+          example: Fruta no encontrada
+
+  responses:
+    NoEncontrada:
+      description: No existe una fruta con ese id
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    ErrorValidacion:
+      description: El cuerpo de la petición no es válido (campos faltantes, calificación fuera de rango, etc.)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              detail:
+                type: array
+                items:
+                  type: object

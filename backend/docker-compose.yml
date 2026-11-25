@@ -1,0 +1,14 @@
+services:
+  frutas-api:
+    build:
+      context: .
+    container_name: frutas-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_PATH: /data/frutas.db
+    volumes:
+      - frutas-data:/data
+
+volumes:
+  frutas-data:
